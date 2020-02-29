@@ -5,6 +5,8 @@ function UploadFile() {
   const [file, setFile] = useState("");
   const [filename, setFilename] = useState("Choose file");
   const [url, setURL] = useState("");
+  const [options, setOptions] = useState(["Default Headers"]);
+  const [choice, setChoice] = useState('');
 
   const onChange = e => {
     console.log("onChange");
@@ -19,9 +21,21 @@ function UploadFile() {
 
     axios
       .post("/upload", data)
-      .then(res => console.log(res))
+      .then(res => {
+        console.log(res);
+        console.log(res.header);
+        console.log(res.rows);
+        console.log(res.rows[0]);
+        //setOption(res.data);
+        setOptions([...options, "hello world!"]);
+      })
       .catch(err => console.warn(err));
   };
+
+  const newChoice = e => {
+    console.log("newChoice");
+    setChoice(e.target.value);
+  }
 
   return (
     <div className="import">
@@ -39,15 +53,22 @@ function UploadFile() {
             className="custom-file-input"
             id="inputGroupFile01"
             aria-describedby="inputGroupFileAddon01"
-            onChange={onChange}
+            onChange={ onChange }
           />
           <label className="custom-file-label" htmlFor="inputGroupFile01">
-            {filename}
+            { filename }
           </label>
         </div>
       </div>
-      <button onClick={ submitFile }>Upload </button>
+
+      <button onClick={ submitFile }>Upload</button>
+
       <p>Drag and drop the uploaded groupings to match our groupings</p>
+      <select value={ choice } onChange={ newChoice }>
+        { options.map(option =>
+          <option value={ option }>{ option }</option>
+        )}
+      </select>
     </div>
   );
 }
