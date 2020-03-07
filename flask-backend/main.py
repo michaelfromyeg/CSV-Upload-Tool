@@ -1,7 +1,7 @@
 __author__ = 'michaelfromyeg'
 import os
 import io
-from flask import Flask, make_response, request, render_template
+from flask import Flask, make_response, request, render_template, jsonify
 import csv
 
 app = Flask(__name__)
@@ -17,18 +17,14 @@ def upload():
 
     stream = io.StringIO(f.stream.read().decode("UTF8"), newline=None)
     csv_input = csv.reader(stream)
-    #print("file contents: ", file_contents)
-    #print(type(file_contents))
-    print(csv_input)
+
+    data = []
     for row in csv_input:
-        print(row)
+        data.append(row)
 
-    stream.seek(0)
-    result = transform(stream.read())
-
-    response = make_response(result)
-    response.headers["Content-Disposition"] = "attachment; filename=result.csv"
-    return response
+    print(jsonify(data))
+    
+    return jsonify(data)
 
 @app.route("/")
 def index():

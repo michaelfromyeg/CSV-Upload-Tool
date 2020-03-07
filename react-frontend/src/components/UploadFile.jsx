@@ -1,40 +1,56 @@
 import React, { useState } from "react";
 import axios from 'axios';
+import * as constants from './constants.jsx'
 
 function UploadFile() {
-  const [file, setFile] = useState("");
-  const [filename, setFilename] = useState("Choose file");
-  const [url, setURL] = useState("");
-  const [options, setOptions] = useState(["Default Headers"]);
-  const [choice, setChoice] = useState('');
+  const headers = constants.HEADERS;
+  const choices = {};
+  headers.map(header => {
+    choices[header] = '';        
+  })
 
-  const onChange = e => {
-    console.log("onChange");
+  const [choice, setChoice] = useState(choices);
+  const [file, setFile] = useState('');
+  const [filename, setFilename] = useState('Choose file');
+  const [options, setOptions] = useState(['None']);
+  const [chosenOptions, setChosenOptions] = useState([]);
+
+  const chooseFile = e => {
+    console.log('chooseFile');
     setFile(e.target.files[0]); // Will only take first file if multiple selected
     setFilename(e.target.files[0].name);
   };
 
   const submitFile = e => {
-    console.log("submitFile");
+    console.log('submitFile');
     const data = new FormData();
-    data.append("file", file);
+    data.append('file', file);
 
     axios
-      .post("/upload", data)
+      .post('/upload', data)
       .then(res => {
         console.log(res);
-        console.log(res.header);
-        console.log(res.rows);
-        console.log(res.rows[0]);
-        //setOption(res.data);
-        setOptions([...options, "hello world!"]);
+        console.log(res.data);
+        console.log("res.data[0]" + res.data[0])
+        setOptions(res.data[0]);
       })
       .catch(err => console.warn(err));
   };
 
   const newChoice = e => {
-    console.log("newChoice");
-    setChoice(e.target.value);
+    console.log('newChoice');
+
+    choices[e.target.name] = e.target.value;
+    console.log('new choices: ' + choices);
+    setChoice(choices);
+    setChosenOptions([...chosenOptions, e.target.value]);
+
+    let oldOptions = [...options];
+    oldOptions.splice(oldOptions.indexOf(e.target.value), 1);
+    console.log(oldOptions);  
+    setOptions(oldOptions);
+    
+    console.log('new chosen options: ' + chosenOptions);
   }
 
   return (
@@ -53,7 +69,7 @@ function UploadFile() {
             className="custom-file-input"
             id="inputGroupFile01"
             aria-describedby="inputGroupFileAddon01"
-            onChange={ onChange }
+            onChange={ chooseFile }
           />
           <label className="custom-file-label" htmlFor="inputGroupFile01">
             { filename }
@@ -64,11 +80,18 @@ function UploadFile() {
       <button onClick={ submitFile }>Upload</button>
 
       <p>Drag and drop the uploaded groupings to match our groupings</p>
-      <select value={ choice } onChange={ newChoice }>
-        { options.map(option =>
-          <option value={ option }>{ option }</option>
-        )}
-      </select>
+
+      { headers.map(header => 
+        <div>
+          <p>{ header }</p>
+          <select value={ choices.header } name={ header } onChange={ newChoice }>
+          { options.map(option =>
+            <option value={ option }>{ option }</option>
+          )}
+          </select>
+        </div>
+      )}
+
     </div>
   );
 }

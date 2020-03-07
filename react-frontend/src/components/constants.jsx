@@ -1,0 +1,1 @@
+export const HEADERS = ['firstName', 'lastName', 'asset', 'createdOn'];
