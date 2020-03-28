@@ -1,15 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
-import UploadFile from './components/UploadFile';
-//import MatchFields from './components/matchFields';
-//<MatchFields></MatchFields>
+import ImportAndMatch from './components/ImportAndMatch';
 
 function App() {
   return (
     <div className="App">
-      <p>My token is { window.token }</p>
-      <h1>User Import</h1>
-      <UploadFile />
+      <ImportAndMatch />
     </div>
   );
 }
