@@ -1,3 +1,13 @@
+# Python backend
+__pycache__
+env/
+flask-backend/env/
+
+react
+
+# VScode
+/.vscode
+
 # Logs
 logs
 *.log
@@ -111,3 +121,70 @@ dist
 
 # Building static version of project
 react-development/
+
+# Python nonsense
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+db.sqlite3
+migrations/
+media/
+settings.py
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*,cover
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+flask-backend/static/react/service-worker.js
+flask-backend/templates/index.html
+flask-backend/static/react/precache-manifest.90b4d9c7c190530c30a82b2b13c43460.js
+flask-backend/static/react/precache-manifest.4455c7dbb129a974865a0a2fec25646a.js
+flask-backend/static/react/js/main.bbde1dc5.chunk.js.map
