@@ -2,7 +2,9 @@
 __pycache__
 env/
 flask-backend/env/
-
+env
+static
+flaskr
 react
 
 # VScode
