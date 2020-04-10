@@ -28,10 +28,11 @@ db = SQLAlchemy(app)
 
 class Data(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    data = db.Column(types.JSON())
+    data = db.Column(types.Text()) 
+    # JSON formatted string, keys are 0-N for entries, values are each row, keys of entries are 'our headers', values of values are their values
 
     def __repr__(self):
-        return f"Data('{user.id}', '{user.data}')"
+        return f"Data('{self.id}', '{self.data}')"
 
 def transform(text_file_contents):
     return text_file_contents.replace("=", ",")
@@ -67,9 +68,12 @@ def download():
 @app.route("/submit", methods=["POST"])
 @cross_origin(supports_credentials=True)
 def submit():
-    pp = pprint.PrettyPrinter(indent=4)
-    pp.pprint(request)
-    # submit data to SQLite db 
+    json_data = request.data
+    print('json data')
+    print(json_data)
+    data = Data(data=json_data)
+    db.session.add(data)
+    db.session.commit()
     resp = jsonify(success=True)
     return resp
 

@@ -70,6 +70,7 @@ const ImportAndMatch = () => {
 		axios
 			.post('/upload', data)
 			.then((res) => {
+				console.log(res);
 				setChoiceState({
 					options: res.data[0],
 				});
@@ -103,43 +104,35 @@ const ImportAndMatch = () => {
 	};
 
 	const csvToJSON = async (headers) => {
-		console.log('headers: ', headers);
-		console.log('file: ', file);
+		let ourHeaders = Object.keys(headers);
+		let theirHeaders = Object.values(headers);
 
 		const text = await file.text();
-		console.log(text);
-
 		const jsonResult = await readString(text, {
 			header: true,
 		});
 
-		console.log(jsonResult); // working!
-
 		let newHeadersResult = [];
-		let oldForm = jsonResult.data
+		let jsonData = jsonResult.data
 
-		for (let i = 0; i < oldForm.length; i++) {
-			let obj = oldForm[i];
-			console.log('obj', obj);
-			for (let j = 0; j < headers.length; j++) {
+		for (let i = 0; i < jsonData.length; i++) {
+			let obj = jsonData[i];
+			for (let j = 0; j < ourHeaders.length; j++) {
 				// Get new, old key names from headers, new headerValues
-				let newKey = headers[j];
-				let oldKey = headerValues[headers[j]];
-				console.log('newKey', newKey)
-				console.log('oldKey', oldKey)
-				console.log('object header vibe check', obj[oldKey])
-
+				let newKey = ourHeaders[j];
+				let oldKey = theirHeaders[j];
 				// Replace old key with new key
-				obj[newKey] = oldKey;
+				obj[newKey] = obj[oldKey];
 				delete obj[oldKey];
 			}
 			newHeadersResult.push(obj);
 		}
-		console.log('newHeadersResult: ', newHeadersResult);
-		return newHeadersResult;
+		console.log(JSON.stringify({ ...jsonData }))
+		const db = JSON.stringify({ ...jsonData })
+		return db;
 	};
 
-	const onSubmitMatches = (e) => {
+	const onSubmitMatches = async () => {
 		let matchSelections = Object.values(headerValues);
 		if (hasDuplicates(matchSelections)) {
 			setSubmitMessage({
@@ -148,11 +141,11 @@ const ImportAndMatch = () => {
 				text: 'Your upload has failed. Check you have no duplicate matchings.',
 			});
 		} else {
-			// const data = headerValues;
-			const data = csvToJSON(headerValues);
+			const data = await csvToJSON(headerValues);
+			console.log('data on submit', data)
 			axios
 				.post('/submit', data)
-				.then((res) => {
+				.then(res => {
 					console.log(res);
 					setSubmitMessage({
 						visible: true,
