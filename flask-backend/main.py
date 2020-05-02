@@ -28,11 +28,10 @@ db = SQLAlchemy(app)
 
 class Data(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    data = db.Column(types.JSON) 
     # JSON formatted string, keys are 0-N for entries, values are each row, keys of entries are our headers, values of values are their values
-
+    data = db.Column(types.JSON) 
     def __repr__(self):
-        return f"Database entry {self.id} with data: {self.data}"
+        return f"Database entry {self.id} with data {self.data}"
 
 def transform(text_file_contents):
     return text_file_contents.replace("=", ",")
@@ -69,11 +68,6 @@ def download():
 @cross_origin(supports_credentials=True)
 def submit():
     json_data = request.get_json(silent=True)
-    
-    # For testing
-    item = {'0': json_data.get('0')}
-    print(item)
-
     data = Data(data=json_data)
     db.session.add(data)
     db.session.commit()
