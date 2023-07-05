@@ -15,7 +15,7 @@ jsonify==0.5
 lazy-object-proxy==1.4.3
 MarkupSafe==1.1.1
 mccabe==0.6.1
-pipreqs==0.4.10
+pipreqs==0.4.12
 pylint==2.4.4
 requests==2.31.0
 six==1.14.0
